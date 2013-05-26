@@ -287,6 +287,13 @@ public final class JSONScanner implements JSONLexer {
                     ch = charAt(++bp);
                     return;
                 }
+                if (ch == '"') {
+                    token=JSONToken.LITERAL_STRING;
+                    sp = 0;
+                    pos = bp;
+                    scanString();
+                    return;
+                }
             } else if (expect == JSONToken.LBRACKET) {
                 if (ch == '[') {
                     token = JSONToken.LBRACKET;

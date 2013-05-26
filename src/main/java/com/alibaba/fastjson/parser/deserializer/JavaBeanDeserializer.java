@@ -140,6 +140,24 @@ public class JavaBeanDeserializer implements ObjectDeserializer {
                 lexer.nextToken(JSONToken.COMMA);
                 return (T) createInstance(parser, type);
             }
+            if (lexer.token() == JSONToken.LITERAL_STRING) {
+                String val = lexer.stringVal();
+                lexer.nextToken(JSONToken.COMMA);
+                if (val.isEmpty()) {
+                    return null;
+                } else {
+                    StringBuffer buf = (new StringBuffer()) //
+                            .append("syntax error, expect {, actual ") //
+                            .append(lexer.tokenName()) //
+                            .append(", pos ") //
+                            .append(lexer.pos()) //
+                            .append(", and value not empy,value=")
+                            .append(val)
+                            .append(", fieldName ").append(fieldName) //
+                            ;
+                    throw new JSONException(buf.toString());
+                }
+            }
 
             if (lexer.token() != JSONToken.LBRACE && lexer.token() != JSONToken.COMMA) {
             	StringBuffer buf = (new StringBuffer()) //
